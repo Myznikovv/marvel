@@ -30,7 +30,15 @@
     &__descr {
         font-size: 14px;
         line-height: 18px;
+        width:270px;
+        height:90px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp:5;
+        -webkit-box-orient:vertical;
+
     }
+
     &__btns {
         a:nth-child(1) {
             margin-right: 30px;

@@ -19,6 +19,9 @@ class MarvelService {
     }
     getCharacter =  async (id) => {
         const res = await this.getResources(`${this._apiBase}characters/${id}?${this._apiKey}`);
+        if (res.data.results[0].description === ""){
+            res.data.results[0].description = "Для данного персонажа на данный момент еще нет описания!"
+        }
         return (this._transformCharacter(res.data.results[0]))
     }
 
