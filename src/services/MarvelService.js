@@ -22,7 +22,10 @@ class MarvelService {
         if (res.data.results[0].description === ""){
             res.data.results[0].description = "Для данного персонажа на данный момент еще нет описания!"
         }
+        console.log(44*'ff');
         return (this._transformCharacter(res.data.results[0]))
+
+
     }
 
     _transformCharacter(results){
