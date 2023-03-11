@@ -5,6 +5,7 @@ import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
 class CharList extends Component {
+
     state={
         charList: [],
         loading:true,
@@ -49,7 +50,7 @@ class CharList extends Component {
                 <li
                     className="char__item"
                     key={item.id}
-                    onClick={() =>{}}>
+                    onClick={() =>{this.props.onSelectedChar(item.id)}}>
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
                 </li>
