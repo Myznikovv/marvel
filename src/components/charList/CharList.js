@@ -12,6 +12,7 @@ class CharList extends Component {
         error:false
     }
 
+
     componentWillMount() {
         this.updateCharCards();
     }
