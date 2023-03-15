@@ -15,9 +15,7 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
      marvelService = new MarvelService();
 
      componentWillMount() {
-
          this.updateChar();
-
      }
 
      updateChar = ()=>{

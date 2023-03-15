@@ -6,52 +6,73 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 
 class CharList extends Component {
 
-    state={
+    state = {
         charList: [],
-        loading:true,
-        error:false
+        loading: true,
+        error: false,
+        newCharLoading: false,
+        offset: 210,
+        charEnded: false
     }
 
 
     componentWillMount() {
-        this.updateCharCards();
+        this.getCharResources();
     }
+
 
     marvelService = new MarvelService();
 
-    updateCharCards = ()=>{
+    getCharResources = (offset) => {
+        this.onNewCharLoading();
         this.marvelService
-            .getAllCharacters()
+            .getAllCharacters(offset)
             .then(this.onCharLoaded)
             .catch(this.onCharError);
     }
 
-    onCharLoaded =(charList)=>{
+
+    onNewCharLoading = () => {
         this.setState({
-            charList,
+            newCharLoading: true
+        })
+    }
+
+    onCharLoaded = (newCharList) => {
+        let end = false;
+        if (newCharList.length < 9) {
+            end = true;
+        }
+        this.setState(({charList, offset}) => ({
+                charList: [...charList, ...newCharList],
+                loading: false,
+                newCharLoading:false,
+                offset: offset + 9,
+                charEnded: end,
+            }))
+    }
+
+    onCharError = () => {
+        this.setState({
+            error: true,
             loading:false
         })
-
     }
 
-    onCharError = () =>{
-        this.setState({
-            error: true
-        })
-    }
-
-    renderItems = (charList)=>{
-        const result =  charList.map( item => {
-            let  imgStyle = {objectFit : "cover"};
-            if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"){
-               imgStyle = {objectFit: "contain"} ;
+    renderItems = (charList) => {
+        const result = charList.map(item => {
+            let imgStyle = {objectFit: "cover"};
+            if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
+                imgStyle = {objectFit: "contain"};
             }
 
             return (
                 <li
                     className="char__item"
                     key={item.id}
-                    onClick={() =>{this.props.onSelectedChar(item.id)}}>
+                    onClick={() => {
+                        this.props.onSelectedChar(item.id)
+                    }}>
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
                 </li>
@@ -63,25 +84,31 @@ class CharList extends Component {
             </ul>
         )
     }
-   render() {
-       const {charList, error, loading  }  = this.state;
-       const result = this.renderItems(charList);
-       const spinner = loading ? <Spinner/> : null;
-       const errorMessage = error ? <ErrorMessage/> : null;
-       const content =  !(errorMessage || loading ) ? result : null;
+
+    render() {
+        const {charList, error, loading, newCharLoading, offset, charEnded} = this.state;
+        const result = this.renderItems(charList);
+        const spinner = loading ? <Spinner/> : null;
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const content = !(errorMessage || loading) ? result : null;
 
 
-       return (
-           <div className="char__list">
-               {errorMessage}
-               {spinner}
-               {content}
-               <button className="button button__main button__long">
-                   <div className="inner">load more</div>
-               </button>
-           </div>
-       )
-   }
+        return (
+            <div className="char__list">
+                {errorMessage}
+                {spinner}
+                {content}
+                <button className="button button__main button__long"
+                        disabled={newCharLoading}
+                        style ={{display: charEnded ? 'none': 'block'}}
+                        onClick={() => {
+                            this.getCharResources(offset)
+                        }}>
+                    <div className="inner">load more</div>
+                </button>
+            </div>
+        )
+    }
 }
 
 export default CharList;
