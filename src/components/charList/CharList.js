@@ -11,25 +11,20 @@ import useMarvelService from "../../services/MarvelService";
 const CharList = (props) => {
 
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [newCharLoading, setNewCharLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charEnded, setCharEnded] = useState(false);
 
     useEffect(() => {
         getCharResources();
-        console.log('ddd')
     },[])
 
-    const marvelService = useMarvelService();
+    const {loading, error, getAllCharacters }  = useMarvelService();
 
     const getCharResources = (offset) => {
         onNewCharLoading();
-        marvelService
-            .getAllCharacters(offset)
-            .then(onCharLoaded)
-            .catch(onCharError);
+        getAllCharacters(offset)
+            .then(onCharLoaded);
     }
 
 
@@ -44,16 +39,11 @@ const CharList = (props) => {
         }
 
         setCharList(charList=>[...charList, ...newCharList]);
-        setLoading(loading => false);
         setNewCharLoading(false);
         setOffset(offset => offset+9);
         setCharEnded(end);
     }
 
-    const onCharError = () => {
-        setError(true);
-        setLoading(false);
-    }
 
 
     const itemRefs = [];
