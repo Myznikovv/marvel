@@ -1,9 +1,9 @@
 import './charList.scss';
-import MarvelService from "../../services/MarvelService";
 import { useEffect, useState} from "react";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import PropTypes from 'prop-types';
+import useMarvelService from "../../services/MarvelService";
 
 
 
@@ -22,7 +22,7 @@ const CharList = (props) => {
         console.log('ddd')
     },[])
 
-    const marvelService = new MarvelService();
+    const marvelService = useMarvelService();
 
     const getCharResources = (offset) => {
         onNewCharLoading();
