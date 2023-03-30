@@ -16,20 +16,21 @@ const CharList = (props) => {
     const [charEnded, setCharEnded] = useState(false);
 
     useEffect(() => {
-        getCharResources();
+        getCharResources(offset, true);
     },[])
 
     const {loading, error, getAllCharacters }  = useMarvelService();
 
-    const getCharResources = (offset) => {
-        onNewCharLoading();
+    const getCharResources = (offset, initial) => {
+        initial ? onNewCharLoading(false) : onNewCharLoading(true);
+
         getAllCharacters(offset)
             .then(onCharLoaded);
     }
 
 
-    const onNewCharLoading = () => {
-        setNewCharLoading(true);
+    const onNewCharLoading = (newCharLoading = true) => {
+        setNewCharLoading(newCharLoading);
     }
 
     const onCharLoaded = (newCharList) => {
@@ -87,16 +88,15 @@ const CharList = (props) => {
         )
     }
     const result = renderItems(charList);
-    const spinner = loading ? <Spinner/> : null;
+    const spinner = loading && !newCharLoading ? <Spinner/> : null;
     const errorMessage = error ? <ErrorMessage/> : null;
-    const content = !(errorMessage || loading) ? result : null;
 
 
     return (
         <div className="char__list">
             {errorMessage}
             {spinner}
-            {content}
+            {result}
             <button className="button button__main button__long"
                     disabled={newCharLoading}
                     style={{display: charEnded ? 'none' : 'block'}}
