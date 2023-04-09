@@ -12,7 +12,6 @@ class ErrorBoundary extends Component{
         return {error};
     }
 
-    ё
     render() {
         const {error} = this.state;
         if(error){

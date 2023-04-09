@@ -14,8 +14,8 @@ export const useHttpHook =  ()=>{
                 throw new Error(`Couldn't fetch ${url}, status : ${response.status} `)
             }
             const data = await response.json();
-
             setLoading(false);
+
             return data;
         }catch (e){
             setLoading(false);
