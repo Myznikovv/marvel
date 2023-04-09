@@ -23,7 +23,7 @@ const AppHeader = () => {
                     /
                     <li>
                         <NavLink
-                            end to={"/comics"}
+                            to={"/comics"}
                             style={({ isActive }) => {
                                 return {
                                     color: isActive ? "#9F0013" : "",
